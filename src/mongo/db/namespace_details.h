@@ -540,7 +540,7 @@ namespace mongo {
                 return NULL;
             }
 
-            SimpleRWLock::Shared lk(_openRWLock);
+            SimpleMutex::scoped_lock lk(_openLock);
             return find_ns_locked(ns);
         }
 
@@ -556,7 +556,7 @@ namespace mongo {
 
             {
                 // Try to find the ns in a shared lock. If it's there, we're done.
-                SimpleRWLock::Shared lk(_openRWLock);
+                SimpleMutex::scoped_lock lk(_openLock);
                 NamespaceDetails *d = find_ns_locked(ns);
                 if (d != NULL) {
                     d->validateConnectionId(cc().getConnectionId());
@@ -618,7 +618,7 @@ namespace mongo {
         // This lock protects access to the _namespaces variable
         // With a DBRead lock and this shared lock, one can retrieve
         // a NamespaceDetails that has already been opened
-        SimpleRWLock _openRWLock;
+        SimpleMutex _openLock;
     };
 
     // Gets the namespace objects for this client threads' current database.

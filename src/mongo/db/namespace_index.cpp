@@ -33,7 +33,7 @@ namespace mongo {
             _dir(dir),
             _nsdbFilename(database.toString() + ".ns"),
             _database(database.toString()),
-            _openRWLock("nsOpenRWLock")
+            _openLock("nsOpenLock")
     {}
 
     NamespaceIndex::~NamespaceIndex() {
@@ -59,7 +59,7 @@ namespace mongo {
     void NamespaceIndex::init(bool may_create) {
         Lock::assertAtLeastReadLocked(_database);
         if (!allocated()) {
-            SimpleRWLock::Exclusive lk(_openRWLock);
+            SimpleMutex::scoped_lock lk(_openLock);
             if (!allocated()) {
                 _init(may_create);
             }
@@ -229,7 +229,7 @@ namespace mongo {
             // the fact that we have the row lock ensures only one thread will
             // be here for a particular ns at a time.
             shared_ptr<NamespaceDetails> details = NamespaceDetails::make( serialized, bulkLoad );
-            SimpleRWLock::Exclusive lk(_openRWLock);
+            SimpleMutex::scoped_lock lk(_openLock);
             verify(!_namespaces[ns]);
             _namespaces[ns] = details;
             return details.get();
