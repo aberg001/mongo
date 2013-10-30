@@ -162,8 +162,12 @@ namespace mongo {
         
         ClientCursor(int queryOptions, const shared_ptr<Cursor>& c, const string& ns,
                      BSONObj query = BSONObj(), const bool inMultiStatementTxn = false );
+        ClientCursor(bool dummyArg, int queryOptions, const shared_ptr<Cursor>& c, const string& ns);
 
         ~ClientCursor();
+
+        // Initializes cursorID        
+        void initCursorID();
 
         // ***************  basic accessors *******************
 
