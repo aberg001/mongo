@@ -112,7 +112,12 @@ namespace mongo {
                     return;
                 if ( _c ) {
                     // be careful in case cursor was deleted by someone else
-                    ClientCursor::erase( _id );
+                    if (_id == INVALID_CURSOR_ID) {
+                        delete _c;
+                    }
+                    else {
+                        ClientCursor::erase( _id );
+                    }
                 }
                 if ( c ) {
                     _c = c;
