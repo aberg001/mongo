@@ -143,18 +143,17 @@ namespace mongo {
     class IndexedCollection : public NamespaceDetails {
     private:
         BSONObj determinePrimaryKey(const BSONObj &options) {
-            BSONObj pkPattern = BSON("_id" << 1);
+            const BSONObj idPattern = BSON("_id" << 1);
+            BSONObj pkPattern = idPattern;
             if (options["primaryKey"].ok()) {
                 uassert(17209, "defined primary key must be an object", options["primaryKey"].type() == Object);
+                pkPattern = options["primaryKey"].Obj();
                 bool pkPatternLast = false;
-                pkPattern = options["primaryKey"].embeddedObject();
-                if (pkPattern["_id"].ok()) {
-                    for (BSONObjIterator i(pkPattern); i.more(); ) {
-                        const BSONElement e = i.next();
-                        if (strcmp(e.fieldName(), "_id") == 0 && e.numberLong() == 1) {
-                            pkPatternLast = !i.more();
-                            break;
-                        }
+                for (BSONObjIterator i(pkPattern); i.more(); ) {
+                    const BSONElement e = i.next();
+                    if (!i.more()) {
+                        // This is the last element. Needs to be _id: 1
+                        pkPatternLast = e.wrap() == idPattern;
                     }
                 }
                 uassert(17203, "defined primary key must end in _id: 1", pkPatternLast);
