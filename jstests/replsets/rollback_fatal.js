@@ -4,7 +4,7 @@ doTest = function (signal, txnMemLimit, startPort) {
 
     var num = 3;
     var host = getHostName();
-    var name = "rollback_simple";
+    var name = "rollback_fatal";
     var timeout = 60000;
 
     var replTest = new ReplSetTest( {name: name, nodes: num, startPort:startPort, txnMemLimit: txnMemLimit} );

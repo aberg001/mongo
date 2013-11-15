@@ -2,11 +2,11 @@
 
 
 doTest = function (signal, txnLimit, startPort) {
-    var replTest = new ReplSetTest({ name: 'unicomplex', nodes: 1, startPort:startPort, txnMemLimit: txnLimit});
+    var replTest = new ReplSetTest({ name: 'oplogStaleQuery', nodes: 1, startPort:startPort, txnMemLimit: txnLimit});
     var nodes = replTest.nodeList();
 
     var conns = replTest.startSet();
-    var r = replTest.initiate({ "_id": "unicomplex",
+    var r = replTest.initiate({ "_id": "oplogStaleQuery",
                               "members": [
                                           { "_id": 0, "host": nodes[0], priority:10 }]
                               });

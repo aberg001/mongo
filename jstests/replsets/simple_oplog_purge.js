@@ -2,11 +2,11 @@
 
 
 doTest = function (signal, startPort, startingExpireOplogHours) {
-    var replTest = new ReplSetTest({ name: 'unicomplex', nodes: 1, startPort:startPort});
+    var replTest = new ReplSetTest({ name: 'simpleOplogPurge', nodes: 1, startPort:startPort});
     var nodes = replTest.nodeList();
 
     var conns = replTest.startSet();
-    var r = replTest.initiate({ "_id": "unicomplex",
+    var r = replTest.initiate({ "_id": "simpleOplogPurge",
                               "members": [
                                           { "_id": 0, "host": nodes[0], priority:10 }]
                               });

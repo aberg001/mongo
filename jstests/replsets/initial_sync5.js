@@ -83,11 +83,11 @@ function undo_and_redo_entries(replTest, conns, txnLimit) {
 
 
 doTest = function (signal, txnLimit, startPort) {
-    var replTest = new ReplSetTest({ name: 'unicomplex', nodes: 3, startPort:startPort, txnMemLimit: txnLimit});
+    var replTest = new ReplSetTest({ name: 'initial_sync5', nodes: 3, startPort:startPort, txnMemLimit: txnLimit});
     var nodes = replTest.nodeList();
 
     var conns = replTest.startSet();
-    var r = replTest.initiate({ "_id": "unicomplex",
+    var r = replTest.initiate({ "_id": "initial_sync5",
                               "members": [
                                           { "_id": 0, "host": nodes[0], priority:10 },
                                           { "_id": 1, "host": nodes[1] },

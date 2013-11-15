@@ -38,11 +38,11 @@ function dbs_match(a, b) {
 }
 
 doTest = function (signal, txnLimit, startPort) {
-    var replTest = new ReplSetTest({ name: 'unicomplex', nodes: 3, startPort:startPort, txnMemLimit: txnLimit});
+    var replTest = new ReplSetTest({ name: 'addDropRepeatedIndex', nodes: 3, startPort:startPort, txnMemLimit: txnLimit});
     var nodes = replTest.nodeList();
 
     var conns = replTest.startSet();
-    var r = replTest.initiate({ "_id": "unicomplex",
+    var r = replTest.initiate({ "_id": "addDropRepeatedIndex",
                               "members": [
                                           { "_id": 0, "host": nodes[0], priority:10 },
                                           { "_id": 1, "host": nodes[1] },
